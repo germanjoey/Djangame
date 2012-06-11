@@ -199,6 +199,7 @@
             var data = $this.data('inventory');
             
             data.ul.remove();
+            data.infoPane.remove();
             data.ul = $('<ul class="' + data.listClass + '">' );
             $this.append(data.ul);
             $this.unbind('keydown');
@@ -463,19 +464,20 @@
                             firstLi = li;
                         }
                     
-                        if (data.categories.tabbed) {                            
-                            var letterObj = li.find('.letter');
-                            var letter = letterObj.text();
-                            var id = letterLookup[letter].id;
+                        if (data.lettered) {
+                            if (data.categories.tabbed) {                            
+                                var letterObj = li.find('.letter');
+                                var letter = letterObj.text();
+                                var id = letterLookup[letter].id;
+                                
+                                if (data.lettered && (!data.letterMemory)) {
+                                    letter = $this.inventory('_genLetter', categoryLengths[cat]);
+                                    letterObj.text(letter);
+                                }
                             
-                            if (data.lettered && (!data.letterMemory)) {
-                                letter = $this.inventory('_genLetter', categoryLengths[cat]);
-                                letterObj.text(letter);
+                                $this.inventory('_bindLetter', li.find('a'), letter, id, i);
                             }
-                        
-                            $this.inventory('_bindLetter', li.find('a'), letter, id, i);
                         }
-                        
                         categoryLengths[cat] ++;
                         subUl[cat].append(li);
                     }
@@ -736,16 +738,17 @@
                 infoText = data.infoBar.text;
             }
             else {
-                if (data.lettered & data.letterMemory) {
+                if (data.lettered && data.letterMemory) {
                     infoText = infoText + " Drag and drop the inventory letters to organize! ";
                 }
-                if (data.categories.tabbed) {
+                if (data.categories.used && data.categories.tabbed) {
                     infoText = infoText + " Click the tabs to switch between categories! ";
                 }
             }
             
             if (infoText != '') {
                 var infoPane = $('<div class="' + data.infoBar['class']  + '"></div>');
+                data.infoPane = infoPane;
                 var buttonPane = $this.data('inventory').dialog.parent().find('button:last').parent().parent();
                 infoPane.insertBefore(buttonPane);
                 infoPane.text(infoText);

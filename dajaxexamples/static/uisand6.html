@@ -25,7 +25,7 @@
 		.validateTips { border: 1px solid transparent; padding: 0.3em; }
 	</style>
 	<script>
-		
+	
 	$(function() {
 		$( '#dialog-form' ).inventory({
             'modal' : true,
@@ -53,6 +53,19 @@
 		$( '#open-inventory' )
 			.button()
 			.click(function() {
+            
+                $( '#dialog-form' ).inventory('option', 'paged', $("#cbPaged").prop("checked"));
+                $( '#dialog-form' ).inventory('option', 'lettered', $("#cbLettered").prop("checked"));
+                $( '#dialog-form' ).inventory('option', 'letterMemory', $("#cbLetterMemory").prop("checked"));
+                $( '#dialog-form' ).inventory('option', 'expandedDesc', $("#cbExpandedDesc").prop("checked"));
+                $( '#dialog-form' ).inventory('option', 'categories', {
+                    'used': $("#cbCategories").prop("checked"),
+                    'tabbed': $("#cbCategoriesTabbed").prop("checked")
+                });
+                $( '#dialog-form' ).inventory('option', 'infoBar', {
+                    'used': $("#cbInfoBar").prop("checked")
+                });
+            
 				$( '#dialog-form' ).inventory('open', [
                     {
                         'id' : 1,
@@ -144,6 +157,18 @@
     <div>
     <button id="open-inventory">Open Inventory</button>
     </div>
+    
+    <div>
+    <form action="">
+        <input type="checkbox" name="vehicle" id="cbPaged" value="0"/>Paged<br />
+        <input type="checkbox" name="vehicle" id="cbLettered" value="1" checked/>Lettered<br />
+        <input type="checkbox" name="vehicle" id="cbLetterMemory" value="2" checked/>LetterMemory<br />
+        <input type="checkbox" name="vehicle" id="cbExpandedDesc" value="3" checked/>ExpandedDesc<br />
+        <input type="checkbox" name="vehicle" id="cbCategories" value="4" checked/>Categories<br />
+        <input type="checkbox" name="vehicle" id="cbCategoriesTabbed" value="5" checked/>CategoriesTabbed<br />
+        <input type="checkbox" name="vehicle" id="cbInfoBar" value="6" checked/>InfoBar<br />
+
+    </form>
 
     </div><!-- End demo -->
 
