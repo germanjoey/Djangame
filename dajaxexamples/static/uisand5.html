@@ -1,0 +1,107 @@
+<html>
+<head>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.8.20/themes/base/jquery-ui.css" type="text/css" media="all" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.8.20/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="swappable.js" type="text/javascript"></script>
+    <style>
+	.swappabletest { list-style-type: none; margin: 0; padding: 0; }
+	.swappabletest li { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; font-size: 4em; text-align: center; }
+    .swappabletest-default { border: black solid 3px; }
+    .swappabletest-default:hover { border: dashed 3px; }
+    #demo1 { width: 666px; height: 208px; margin: auto; padding: 1px; padding-left: 3px; border: 1px solid black; }
+    #demo2 { margin: auto; padding: 1px; padding-left: 3px; border: 1px solid black; }
+    .thickBorder { border: 1px solid black;  }
+	</style>
+	<script>
+    
+    
+        (function( $ ){
+
+            var methods = {
+                init : function( options ) {
+                
+                    var s = $.extend( {
+                        'list_class' : 'swappabletest',
+                        'item_class' : 'swappabletest-default'
+                    }, options);
+                
+                    return this.each(function(){
+                 
+                        var $this = $(this);
+                        var data = $this.data('swappabletest');
+                     
+                        // If the plugin hasn't been initialized yet
+                        if ( ! data ) {
+                            var ul = $(' <ul class="' + s.list_class + '">' );
+                            $this.append(ul);  // append here so we can calculate dimensions later
+                            
+                            var li = new Array();
+                            
+                            for (var i=0; i<12; i++) {
+                                var qq = i;
+                                li[i] = $(' <li class="' + s.item_class + '">' + i + '</li>');
+                                li[i].swappable({
+                                    accept : '.' + s.item_class,
+                                    callback : function(dropTarget,draggedItem) {
+                                        alert(dropTarget.text() + ' ' + draggedItem.text());
+                                    }
+                                });
+                                ul.append(li[i]);
+                            }
+                            
+                            $(this).data('swappabletest', {
+                                target : $this,
+                                ul : ul,
+                                li : li,
+                                item_class: s.item_class,
+                            });
+                        }
+                    });
+                },
+                
+                destroy : function( ) {
+                    return this.each(function(){
+                        var $this = $(this),
+                            data = $this.data('swappabletest');
+
+                        // Namespacing FTW
+                        $(window).unbind('.swappabletest');
+                        data.swappabletest.remove();
+                        $this.removeData('swappabletest');
+                    })
+                }
+            };
+
+            $.fn.swappabletest = function( method ) {
+
+                if ( methods[method] ) {
+                    return methods[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+                }
+                else if ( typeof method === 'object' || ! method ) {
+                    return methods.init.apply( this, arguments );
+                }
+                else {
+                    $.error( 'Method ' +  method + ' does not exist on jQuery.swappabletest' );
+                }    
+
+            };
+
+        })( jQuery );
+    
+	$(function() {
+        $(document).ready(function() {
+            $('#demo1').swappabletest();
+        });
+	});
+    
+	</script>
+
+</head>
+<body>
+<div id="demo1">
+</div><br/>
+<div id="demo2">
+</div>
+</body>
+</html>

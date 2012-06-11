@@ -1,0 +1,23 @@
+Game Ideas
+
+- Lupin III RL
+    - potentially episodic
+    - stealth game
+    - fits in well w/ traditional maguffin-fetch RL
+    - potential AI
+    - hidden "audacity meter" that literally gives plot armor + extra speed when doing crazy stunts, especially on escape
+        - tied in to "momemuntum"
+    - different scenerios
+        - different "friends" w/ different motivations: jigen, goemon, fujiko, zenigata
+    - some kind of mystery to solve at the same time
+    -
+    
+- DotA RL
+    - multiplayer
+    - victory through ganks (multiplayer combos)
+    - LOS will be a big deal
+    
+- Earthbound RL
+
+- Western RL
+    - narrative tension / plotarmor at critical junctures, e.g. shootouts etc

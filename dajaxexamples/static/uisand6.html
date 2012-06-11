@@ -1,0 +1,151 @@
+<html>
+<head>
+    <link rel="stylesheet" href="jquery-ui.css" type="text/css" media="all" />
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script src="jquery-ui.min.js" type="text/javascript"></script>
+    <script src="hotkeys.js" type="text/javascript"></script>
+    <script src="swappable.js" type="text/javascript"></script>
+    <script src="inventory.js" type="text/javascript"></script>
+	<style>
+		body { font-size: 62.5%; }
+		fieldset { padding:0; border: 1px solid #eee; margin-top:10px; margin-right: 0px; margin-left: 0px; margin-bottom: 0px;}
+        .inventoryList { list-style-type: none; margin: 0; padding: 0; }
+        .inventoryItem { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 250px; font-size: 3em; overflow: hidden; white-space: nowrap;}
+        .inventoryItem a { text-decoration: none; }
+        .inventoryItem a:visited { text-decoration: none; }
+        .inventoryItem a:focus { outline: none; }
+        .inventoryCategory { padding:0; border: 1px solid #eee; margin-top:10px; margin-right: 0px; margin-left: 0px; margin-bottom: 0px; }
+        .inventoryCategory legend { color: #FF0000; }
+        .inventoryItem .icon { height: 48px; width: 48px; }
+        .inventoryItem .letter { height: 48px; width: 48px; vertical-align: 13px; margin-left: 20px; }
+        .inventoryItem .desc { vertical-align: 13px; }
+        .inventoryItem .longdesc { font-size: 0.5em; overflow: auto; white-space: normal; }
+        .inventoryItem .expandArrow { float : right; }
+		.ui-dialog .ui-state-error { padding: .3em; }
+		.validateTips { border: 1px solid transparent; padding: 0.3em; }
+	</style>
+	<script>
+		
+	$(function() {
+		$( '#dialog-form' ).inventory({
+            'modal' : true,
+            'maxItems' : 52,
+            'maxPerPage' : 4, 
+            'cols' : 1, 
+            'emptyText' : 'Empty!', 
+            'itemClass' : 'inventoryItem', 
+            'listClass' : 'inventoryList', 
+            'paged' : false, 
+            'lettered' : true, 
+            'letterMemory' : false,
+            'expandedDesc': false,
+            'categories' : {
+                'used' : true,
+                'class' : 'inventoryCategory',
+                'tabbed' : true,
+            }, 
+            'infoBar' : {
+                'used' : true,
+                'class' : 'ui-dialog-buttonpane ui-widget-content ui-helper-clearfix', // the pane by default will use the same as the button pane
+            },
+		});
+
+		$( '#open-inventory' )
+			.button()
+			.click(function() {
+				$( '#dialog-form' ).inventory('open', [
+                    {
+                        'id' : 1,
+                        'text' : 'one',
+                        'letter' : 'a',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'cat',
+                        'longdesc' : 'asasdfgsadgasa sdfgsadg asasdfgsa dgas asdfgsad gasasdfgsad gasasd fgsadg',
+                    },
+                    {
+                        'id' : 2,
+                        'text' : 'two',
+                        'letter' : 'b',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'pig',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 3,
+                        'text' : 'three',
+                        'letter' : 'c',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'dog',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 4,
+                        'text' : 'four',
+                        'letter' : 'd',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'dog',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 5,
+                        'text' : 'five',
+                        'letter' : 'e',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'pig',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 6,
+                        'text' : 'six',
+                        'letter' : 'f',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'horse',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 7,
+                        'text' : 'seven',
+                        'letter' : 'g',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'pig',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 8,
+                        'text' : 'eight ass ass ass ass ass ass ass',
+                        'letter' : 'h',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'pig',
+                        'longdesc' : 'asasdfgsadg',
+                    },
+                    {
+                        'id' : 9,
+                        'text' : 'nine',
+                        'letter' : 'i',
+                        'icon' : 'rss_icon.png',
+                        'category' : 'pig',
+                        'longdesc' : 'asasdfgsadg',
+                    }
+                ], 0);
+			});
+	});
+	</script>
+
+
+</head>
+<body>
+
+    <div class="demo">
+
+    <div id="dialog-form" title="Inventory">
+    </div>
+
+
+    <div>
+    <button id="open-inventory">Open Inventory</button>
+    </div>
+
+    </div><!-- End demo -->
+
+</body>
+</html>

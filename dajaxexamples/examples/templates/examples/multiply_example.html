@@ -1,0 +1,11 @@
+{% extends "examples/examples_base.html"%}
+{% block content %}
+<h1>Multiply Machine!</h1>
+	<input type="text" name="a" value="5" id="a"> x <input type="text" name="b" value="6" id="b"> = <input type="text" name="result" value="" id="result">
+	<input type="button" name="caculate" value="Let's Multiply!" id="caculate" onclick="Dajaxice.examples.multiply(Dajax.process,{'a':$('#a').val(),'b':$('#b').val()})">
+	
+<h1>Empythoned Demo</h1>
+    <textarea disabled="true" id="input" style="font-family: monospace; width: 80%" rows="8">print 'Hello World'</textarea>
+    <input disabled="true" id="button" type="button" value="loading........." style="display: block; margin: auto" />
+    <textarea id="output" style="font-family: monospace; width: 80%" rows="8"></textarea>
+{% endblock %}

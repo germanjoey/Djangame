@@ -1,0 +1,158 @@
+{% load dajaxice_templatetags %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <title>dajaxproject.com - Examples</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>        
+        /**
+        Callback test
+        **/
+        function my_callback(data){
+            alert(data+' received from server');
+        }    
+    </script>
+    
+    <script>
+        /*!
+         * jQuery serializeObject - v0.2 - 1/20/2010
+         * http://benalman.com/projects/jquery-misc-plugins/
+         * 
+         * Copyright (c) 2010 "Cowboy" Ben Alman
+         * Dual licensed under the MIT and GPL licenses.
+         * http://benalman.com/about/license/
+         */
+
+        // Whereas .serializeArray() serializes a form into an array, .serializeObject()
+        // serializes a form into an (arguably more useful) object.
+
+        (function($,undefined){
+          '$:nomunge'; // Used by YUI compressor.
+          
+          $.fn.serializeObject = function(){
+            var obj = {};
+            
+            $.each( this.serializeArray(), function(i,o){
+              var n = o.name,
+                v = o.value;
+                
+                obj[n] = obj[n] === undefined ? v
+                  : $.isArray( obj[n] ) ? obj[n].concat( v )
+                  : [ obj[n], v ];
+            });
+            
+            return obj;
+          };
+          
+        })(jQuery);
+    </script>
+
+    {% dajaxice_js_import %}
+
+    <script type="text/javascript" charset="utf-8">
+        /* Copyright (c) 2009-2010, Benito Jorge Bastida :: For further information check COPYING */
+        var Dajax = {
+            process: function(data)
+            {
+                $.each(data, function(i,elem){
+                switch(elem.cmd)
+                {
+                    case 'alert':
+                        alert(elem.val)
+                        break;
+
+                    case 'data':
+                        eval( elem.fun+"(elem.val);" );
+                        break;
+
+                    case 'as':
+                        jQuery.each($(elem.id),function(){ this[elem.prop] = elem.val; });
+                        break;
+
+                    case 'addcc':
+                        jQuery.each(elem.val,function(){
+                            $(elem.id).addClass(String(this));
+                        });
+                        break;
+
+                    case 'remcc':
+                        jQuery.each(elem.val,function(){
+                            $(elem.id).removeClass(String(this));
+                        });
+                        break;
+
+                    case 'ap':
+                        jQuery.each($(elem.id),function(){ this[elem.prop] += elem.val; });
+                        break;
+
+                    case 'pp':
+                        jQuery.each($(elem.id),function(){ this[elem.prop] = elem.val + this[elem.prop]; });
+                        break;
+
+                    case 'clr':
+                        jQuery.each($(elem.id),function(){ this[elem.prop] = ""; });
+                        break;
+    
+                    case 'red':
+                        window.setTimeout('window.location="'+elem.url+'";',elem.delay);
+                        break;
+
+                    case 'js':
+                        eval(elem.val);
+                        break;
+
+                    case 'rm':
+                        $(elem.id).remove();
+                        break;
+
+                    default:
+                        break;
+                    }
+                });
+            }
+        };
+    </script>
+    <script type="text/javascript" charset="utf-8">
+        function start() {
+            var input = document.getElementById('input');
+            var output = document.getElementById('output');
+            var button = document.getElementById('button');
+            var worker = new Worker('/static/worker.js');
+            var loaded = false;
+            var preloaded = false;
+            
+            var handler = function (e) {
+                if (preloaded) {
+                    if (!loaded) {
+                        loaded = true;
+                        button.value = "Execute";
+                        input.disabled = false;
+                        button.disabled = false;
+                        return;
+                    }
+                    output.value += e.data;
+                }
+            };
+
+            worker.addEventListener('message', handler, false);
+            
+            jQuery.get('/static/game_files/commands.py', function(data) {
+                worker.postMessage(data);
+                preloaded = true;
+            });
+            
+            button.onclick = function() {
+                  worker.postMessage(input.value);
+            };
+        };
+        window.onload = start;
+    </script>
+    
+    {% block extrahead %}{% endblock %}
+  </head>
+  <body>
+    {% block content %}
+    {% endblock %}
+  </body>
+</html>
