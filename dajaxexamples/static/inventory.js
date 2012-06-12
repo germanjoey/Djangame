@@ -49,14 +49,20 @@
                 if ( ! data ) {
                     
                     var dialog = $this.dialog({
-                        autoOpen: false,
-                        resizeable: s.resizable,
-                        modal: s.modal,
-                        buttons: s.buttons,
-                        close: function(event, ui) {
+                        'autoOpen' : false,
+                        'resizeable' : s.resizable,
+                        'modal' : s.modal,
+                        'buttons' : s.buttons,
+                        'close' : function(event, ui) {
                             var $this = $(this);
-                            $this.inventory('_clear');
                             var data = $this.data('inventory');
+                                   
+                            if (data.categories.tabbed) {
+                                var lastSelected = data.ul.tabs('option', 'selected');
+                                data.tabCache = data.tabCacheNames[lastSelected];
+                            }
+                            
+                            $this.inventory('_clear');
                             data.itemStore = new Array();
                             data.lastIndex = 0;
                             data.preWidth = -1;
@@ -64,12 +70,14 @@
                     });
                 
                     $this.data('inventory',  $.extend(s, {
-                        target : $this,
-                        preWidth: -1,
-                        lastIndex : 0,
-                        dialog: dialog,
-                        defaultButtons : s.buttons,
-                        itemStore : new Array(),
+                        'target' : $this,
+                        'preWidth' : -1,
+                        'lastIndex' : 0,
+                        'dialog' : dialog,
+                        'tabCache' : undefined,
+                        'tabCacheNames' : new Array(),
+                        'defaultButtons' : s.buttons,
+                        'itemStore' : new Array(),
                     }));
                     
                     var ul = $this.inventory('_makeList', s.listClass);
@@ -199,7 +207,9 @@
             var data = $this.data('inventory');
             
             data.ul.remove();
-            data.infoPane.remove();
+            if (data.infoPane) {
+                data.infoPane.remove();
+            }
             data.ul = $('<ul class="' + data.listClass + '">' );
             $this.append(data.ul);
             $this.unbind('keydown');
@@ -291,6 +301,9 @@
                     $this.inventory('_bindLetter', button, letter, id, tab);
                 }
             }
+            else if (!data.lettered) {
+                $this.inventory('_bindButton', button, id);
+            }
             
             if (data.expandedDesc) {
                 if (item.longdesc) {
@@ -345,6 +358,25 @@
                     }
                 });
             }
+        },
+        
+        _bindButton : function(button, id) {
+        
+            var $this = $(this);
+            var data = $this.data('inventory');
+            
+            // prevent race condition if $this is selected instead of $this.parent
+            var alreadyPressed = false;
+            var selector = function() {
+                if (!alreadyPressed) {
+                    alert(id);
+                    alreadyPressed = true;
+                    $this.dialog('close');
+                }
+            };
+        
+            button.click(selector);
+            
         },
         
         _bindLetter : function(button, letter, id, tab) {
@@ -485,12 +517,23 @@
             }
             
             var tabUl;
+            var selectDefault = 0;
             if (data.categories.tabbed) {
                 tabUl = $('<ul></ul>');
                 for (var i=0; i<categoryNames.length; i++) {
                     tabUl.append($('<li><a href="#tabs-' + (i+1) + '">' + categoryNames[i] + '</a></li>'));
                 }
                 data.ul.append(tabUl);
+                
+                if (data.tabCache) {
+                    var foundIndex = categoryNames.indexOf(data.tabCache);
+                    if (foundIndex > -1) {
+                        selectDefault = foundIndex;
+                    }
+                }
+                
+                
+                data.tabCacheNames = categoryNames;
             }
             
             var maxCat = 0;
@@ -546,6 +589,7 @@
                 'lineCount' : lineCount,
                 'catCount' : catCount,
                 'tabUl' : tabUl,
+                'selectDefault' : selectDefault
             };
             
         },
@@ -663,7 +707,7 @@
             
         },
         
-        _resizeWindow : function ( itemInfo) {
+        _resizeWindow : function (itemInfo) {
         
             var $this = $(this);
             var data = $this.data('inventory');
@@ -726,6 +770,9 @@
                 collision: 'fit'
             });
             
+            if (data.categories.used && data.categories.tabbed) {
+                data.ul.tabs('select', itemInfo.selectDefault);
+            }
         },
         
         _addInfoPane : function() {

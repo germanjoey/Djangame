@@ -54,15 +54,32 @@
 			.button()
 			.click(function() {
             
-                $( '#dialog-form' ).inventory('option', 'paged', $("#cbPaged").prop("checked"));
+                try {
+                    $( '#dialog-form' ).inventory('option', 'paged', $("#cbPaged").prop("checked"));
+                }
+                catch(e) {
+                    $( '#dialog-form' ).inventory('option', 'categories', {
+                        'used': $("#cbCategories").prop("checked"),
+                        'tabbed': $("#cbCategoriesTabbed").prop("checked"),
+                        'order' : 'sorted',
+                        'class' : 'inventoryCategory'
+                    });
+                    $( '#dialog-form' ).inventory('option', 'paged', $("#cbPaged").prop("checked"));
+                }
+            
+                $( '#dialog-form' ).inventory('option', 'categories', {
+                    'used': $("#cbCategories").prop("checked"),
+                    'tabbed': $("#cbCategoriesTabbed").prop("checked"),
+                    'order' : 'sorted',
+                    'class' : 'inventoryCategory'
+                });
+                
                 $( '#dialog-form' ).inventory('option', 'lettered', $("#cbLettered").prop("checked"));
                 $( '#dialog-form' ).inventory('option', 'letterMemory', $("#cbLetterMemory").prop("checked"));
                 $( '#dialog-form' ).inventory('option', 'expandedDesc', $("#cbExpandedDesc").prop("checked"));
-                $( '#dialog-form' ).inventory('option', 'categories', {
-                    'used': $("#cbCategories").prop("checked"),
-                    'tabbed': $("#cbCategoriesTabbed").prop("checked")
-                });
+                
                 $( '#dialog-form' ).inventory('option', 'infoBar', {
+                    'class' : 'ui-dialog-buttonpane ui-widget-content ui-helper-clearfix',
                     'used': $("#cbInfoBar").prop("checked")
                 });
             
